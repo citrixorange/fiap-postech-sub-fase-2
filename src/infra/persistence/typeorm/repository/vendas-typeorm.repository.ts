@@ -43,7 +43,7 @@ export default class VendaTypeormRepository implements IVendaRepository {
     const venda = await this.repository
       .createQueryBuilder('venda')
       .leftJoinAndSelect('venda.cadastro', 'cadastro')
-      .where('pedido.id = :id', { id })
+      .where('cadastro.id = :id', { id })
       .getOne()
 
     return venda ? VendaMapper.toDomainEntity(venda) : undefined
@@ -60,8 +60,8 @@ export default class VendaTypeormRepository implements IVendaRepository {
   async find(): Promise<Venda[]> {
     const vendas = await this.repository
       .createQueryBuilder('venda')
-      .leftJoinAndSelect('venda.consumidor', 'consumidor')
-      .orderBy('consumidor.preco', 'ASC')
+      .leftJoinAndSelect('venda.cadastro', 'cadastro')
+      .orderBy('cadastro.preco', 'ASC')
       .getMany()
 
     return vendas.map(VendaMapper.toDomainEntity)

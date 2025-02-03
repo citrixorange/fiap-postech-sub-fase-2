@@ -16,6 +16,7 @@ import { VendaController } from '@/core/operation/controllers/vendas.controller'
 
 import VendaResponse from './dto/venda-response'
 import CreateVendaRequest from './dto/create-venda.request'
+import UpdatePagamentoPayload from '@/infra/web/stripe/dto/update-pagamento-payload'
 
 @Controller('v1/vendas')
 @ApiTags('v1/vendas')
@@ -44,6 +45,22 @@ export default class VendasController {
         const controller = new VendaController(this.cadastroRepository, this.vendaRepository);
 
         return controller.create(input)
+    }
+
+    @Post('/pagamento-webhook/stripe')
+    @HttpCode(HttpStatus.OK)
+    @ApiOperation({ summary: 'Atualizar uma venda a partir do evento do gateway de pagamento' })
+    @ApiBody({ type: UpdatePagamentoPayload })
+    @ApiOkResponse({ description: 'O registro atualizado', type: VendaResponse })
+    pagamentoWebhook (
+      @Body() input: UpdatePagamentoPayload
+    ): Promise<VendaResponse> {
+      const cadastroId = input.external_reference
+      const paymentApproved = true
+  
+      const controller = new VendaController(this.cadastroRepository, this.vendaRepository);
+  
+      return controller.updatePayment(cadastroId, paymentApproved)
     }
 
 }

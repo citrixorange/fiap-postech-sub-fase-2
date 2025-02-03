@@ -14,7 +14,7 @@ export class Venda {
   public cadastroId: string
 
   @ManyToOne(() => Cadastro, cadastro => cadastro.id, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'consumidor_id' })
+  @JoinColumn({ name: 'cadastro_id' })
   public cadastro: Cadastro
 
   @Column()

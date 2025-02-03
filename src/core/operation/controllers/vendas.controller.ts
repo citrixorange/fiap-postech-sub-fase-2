@@ -1,4 +1,5 @@
 import VendaUseCase from '@/core/application/usecase/venda/venda.use-case'
+import ProcessPayment from '@/core/application/usecase/venda/payment.use-case'
 import VendaCreateDto from '@/core/domain/dto/input/venda-create.dto'
 import VendaDto from '@/core/domain/dto/output/venda.dto'
 import VendaMapper from '@/core/domain/mappers/vendas.mapper'
@@ -37,5 +38,19 @@ export class VendaController {
     const vendas = await useCase.list()
     
     return vendas.map((venda) => VendaMapper.toDto(venda));
+  }
+
+  async updatePayment (
+    id: string,
+    paymentApproved: boolean
+  ): Promise<VendaDto> {
+    const useCase = new ProcessPayment(
+      new CadastroGateway(this.cadastroRepository),
+      new VendaGateway(this.vendaRepository)
+    );
+
+    const venda = await useCase.handle(id, paymentApproved)
+
+    return VendaMapper.toDto(venda)
   }
 }
