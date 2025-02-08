@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fiap-car-store-migration
+  namespace: fiap-car-store
+  labels:
+    app: fiap-car-store-api
+spec:
+  template:
+    metadata:
+      name:  name
+    spec:
+      containers:
+      - name: fiap-car-store-migration
+        image: fiap-car-store_service-fiap-car-store-api:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - npm run migration:run
+        envFrom:
+          - secretRef:
+              name: fiap-car-store-secret
+          - configMapRef:
+              name: fiap-car-store-config
+      restartPolicy: OnFailure
