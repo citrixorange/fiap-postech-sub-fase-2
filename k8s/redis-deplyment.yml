@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-redis
+  namespace: fiap-car-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-redis
+  template:
+    metadata:
+      labels:
+        app: local-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.2.3
+        ports:
+        - containerPort: 6379
+        volumeMounts:
+        - name: redis-volume
+          mountPath: /data
+      volumes:
+      - name: redis-volume
+        persistentVolumeClaim:
+          claimName: redis-pvc

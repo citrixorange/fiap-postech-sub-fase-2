@@ -36,6 +36,11 @@ docker-compose up
 docker-compose exec service-fiap-car-store-api npm run migration:run
 ```
 
+## Running Project in a Local Kubernetes Cluster
+
+cd migration
+./setup.sh
+
 ## Endpoints
 We developed few endpoints which can be found in [cadastro.controller.ts](./src/infra/web/nestjs/cadastro/cadastro.controller.ts), [vendas.controller.ts](./src/infra/web/nestjs/vendas/vendas.controller.ts) files.
 

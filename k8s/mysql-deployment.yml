@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: local-mysql-fiap-car-store
+  namespace: fiap-car-store
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: local-mysql-fiap-car-store
+  template:
+    metadata:
+      labels:
+        app: local-mysql-fiap-car-store
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.7
+        ports:
+        - containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "batata"
+        - name: MYSQL_ROOT_HOST
+          value: "%"
+        - name: MYSQL_DATABASE
+          value: "fiap-car-store-db"
+        args:
+        - --default-authentication-plugin=mysql_native_password
+        - --character-set-server=utf8
+        - --collation-server=utf8_unicode_ci
+        volumeMounts:
+        - name: mysql-volume
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-volume
+        persistentVolumeClaim:
+          claimName: mysql-pvc

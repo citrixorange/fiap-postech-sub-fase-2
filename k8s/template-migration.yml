@@ -3,19 +3,13 @@ kind: Job
 metadata:
   name: fiap-car-store-migration
   namespace: fiap-car-store
-  labels:
-    app: fiap-car-store-api
 spec:
   template:
-    metadata:
-      name:  name
     spec:
       containers:
       - name: fiap-car-store-migration
-        image: fiap-car-store_service-fiap-car-store-api:latest
-        command: ["/bin/sh", "-c"]
-        args:
-        - npm run migration:run
+        image: fiap-car-store_service-migration:latest
+        imagePullPolicy: IfNotPresent
         envFrom:
           - secretRef:
               name: fiap-car-store-secret
